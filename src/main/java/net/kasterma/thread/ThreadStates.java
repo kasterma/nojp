@@ -2,6 +2,8 @@ package net.kasterma.thread;
 
 import lombok.extern.log4j.Log4j2;
 
+import java.util.concurrent.locks.LockSupport;
+
 /**
  * This Thread runs for a given number of seconds.
  *
@@ -113,6 +115,26 @@ class SyncStatic extends Thread {
         log.info("done");    }
 }
 
+/**
+ * Park the Thread immediately.
+ *
+ * In visualvm this thread is Park (Orange), Thread.getState() is waiting.
+ */
+@Log4j2
+class Park extends Thread {
+    private static Integer id = 0;
+
+    public Park() {
+        super("Park-" + id++);
+    }
+
+    @Override
+    public void run() {
+        log.info("starting");
+        LockSupport.park();
+        log.info("done");    }
+}
+
 @Log4j2
 public class ThreadStates {
     public static void main(String[] args) {
@@ -131,6 +153,8 @@ public class ThreadStates {
         Thread th7 = new SyncStatic(20);
         th6.start();
         th7.start();
+        Thread th8 = new Park();
+        th8.start();
         log.info("started");
         try {
             Thread.sleep(10_000L);
@@ -149,5 +173,6 @@ public class ThreadStates {
         log.info("th5 state {}", th5.getState()); // TERMINATED
         log.info("th6 state {}", th6.getState()); // TIMED_WAITING
         log.info("th7 state {}", th7.getState()); // BLOCKED
+        log.info("th8 state {}", th8.getState()); // WAITING
     }
 }
