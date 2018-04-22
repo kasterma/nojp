@@ -7,3 +7,8 @@
 
 This repo is about keeping a good set on notes on logging, monitoring,
 debugging, benchmarking, and profiling of java software.
+
+## VisualVM
+
+In net.kasterma.thread.ThreadStates we have examples of Threads that
+are in all the states VisualVM can show.
